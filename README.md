@@ -1,7 +1,7 @@
 Laravel MongoDB Passport
 ===============
 
-[![Latest Stable Version](http://img.shields.io/github/release/designmynight/laravel-mongodb-passport.svg)](https://packagist.org/packages/designmynight/laravel-mongodb-passport) [![Total Downloads](http://img.shields.io/packagist/dm/designmynight/laravel-mongodb-passport.svg)](https://packagist.org/packages/designmynight/laravel-mongodb-passport)
+[![Latest Stable Version](http://img.shields.io/github/release/designmynight/laravel-mongodb-passport.svg)](https://packagist.org/packages/skydudie/laravel-mongodb-passport) [![Total Downloads](http://img.shields.io/packagist/dm/skydudie/laravel-mongodb-passport.svg)](https://packagist.org/packages/designmynight/laravel-mongodb-passport)
 
 A service provider to add support for [Laravel Passport](https://github.com/laravel/passport) and [MongoDB](https://github.com/jenssegers/laravel-mongodb).
 
