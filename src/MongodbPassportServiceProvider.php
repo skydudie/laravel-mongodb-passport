@@ -2,63 +2,36 @@
 
 namespace DesignMyNight\Mongodb;
 
-use DesignMyNight\Mongodb\Passport\Bridge\RefreshTokenRepository as BridgeRefreshTokenRepository;
-use DesignMyNight\Mongodb\Passport\RefreshTokenRepository;
 use Illuminate\Support\ServiceProvider;
 use DesignMyNight\Mongodb\Passport\AuthCode;
 use DesignMyNight\Mongodb\Passport\Client;
 use DesignMyNight\Mongodb\Passport\PersonalAccessClient;
 use DesignMyNight\Mongodb\Passport\Token;
+use DesignMyNight\Mongodb\Passport\Bridge\RefreshTokenRepository;
+use DesignMyNight\Mongodb\Passport\Bridge\RefreshToken;
 
 class MongodbPassportServiceProvider extends ServiceProvider
 {
-    /** @var string */
-    private $method = 'alias';
-
-    /** @var array */
-    private $aliases = [
-        'Laravel\Passport\AuthCode' => AuthCode::class,
-        'Laravel\Passport\Bridge\RefreshTokenRepository' => BridgeRefreshTokenRepository::class,
-        'Laravel\Passport\Client' => Client::class,
-        'Laravel\Passport\PersonalAccessClient' => PersonalAccessClient::class,
-        'Laravel\Passport\RefreshTokenRepository' => RefreshTokenRepository::class,
-        'Laravel\Passport\Token' => Token::class,
-    ];
-
-    /** @var Illuminate\Foundation\AliasLoader */
-    private $loader;
-
-    /**
-     * @return void
-     */
     public function register()
     {
-        if (class_exists($loader = 'Illuminate\Foundation\AliasLoader')) {
-            $this->loader = $loader::getInstance();
-            $this->method = 'loadAlias';
+        /*
+         * Passport client extends Eloquent model by default, so we alias them.
+         */
+        if (class_exists('Illuminate\Foundation\AliasLoader')) {
+            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+            $loader->alias('Laravel\Passport\AuthCode', AuthCode::class);
+            $loader->alias('Laravel\Passport\Client', Client::class);
+            $loader->alias('Laravel\Passport\Bridge\RefreshTokenRepository', RefreshTokenRepository::class);
+            $loader->alias('Laravel\Passport\Bridge\RefreshToken', RefreshToken::class);
+            $loader->alias('Laravel\Passport\PersonalAccessClient', PersonalAccessClient::class);
+            $loader->alias('Laravel\Passport\Token', Token::class);
+        } else {
+            class_alias('Laravel\Passport\AuthCode', AuthCode::class);
+            class_alias('Laravel\Passport\Client', Client::class);
+            class_alias('Laravel\Passport\Bridge\RefreshTokenRepository', RefreshTokenRepository::class);
+            class_alias('Laravel\Passport\Bridge\RefreshToken', RefreshToken::class);
+            class_alias('Laravel\Passport\PersonalAccessClient', PersonalAccessClient::class);
+            class_alias('Laravel\Passport\Token', Token::class);
         }
-
-        foreach ($this->aliases as $original => $alias) {
-            $this->{$this->method}($original, $alias);
-        }
-    }
-
-    /**
-     * @param string $original
-     * @param string $alias
-     */
-    private function alias(string $original, string $alias): void
-    {
-        class_alias($original, $alias);
-    }
-
-    /**
-     * @param string $original
-     * @param string $alias
-     */
-    private function loadAlias(string $original, string $alias): void
-    {
-        // Passport client extends Eloquent model by default, so we alias them.
-        $this->loader->alias($original, $alias);
     }
 }
